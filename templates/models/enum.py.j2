@@ -1,0 +1,12 @@
+from __future__ import annotations
+
+from enum import Enum
+
+
+class {{ data.class_name }}(Enum):
+{%- for attribute in data.enum_attributes %}
+    {{ attribute.attribute_name }} = {{ attribute.attribute_value }}
+{%- endfor %}
+
+    def __repr__(self):
+        return self.value

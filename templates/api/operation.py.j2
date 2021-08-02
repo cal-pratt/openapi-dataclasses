@@ -1,0 +1,83 @@
+import dataclasses
+from typing import Any
+
+import dataclasses_json
+
+from ..client import Client
+{%- if data.attributes %}
+{%- endif %}
+{% for module_name, values in data.imports.items() -%}
+from {{ module_name }} import {{ values | join(', ') }}
+{% endfor %}
+
+{%- if data.response_type != "None" %}
+@dataclasses_json.dataclass_json
+@dataclasses.dataclass
+class {{ data.class_name }}Response:
+    content: {{ data.response_type }}
+{%- endif %}
+
+@dataclasses_json.dataclass_json
+@dataclasses.dataclass
+class {{ data.class_name }}Request:
+    """
+    Generated class for {{ data.method.upper() }} {{ data.path }}
+
+    Schema:
+    .. code-block:: json
+
+        {{ data.schema_json | indent(8) }}
+    """
+
+{%- for attr in data.attributes %}
+{%- if attr.required %}
+    {{ attr.attr }}: {{ attr.type }}
+{%- endif %}
+{%- endfor %}
+{%- for attr in data.attributes %}
+{%- if not attr.required %}
+    {{ attr.attr }}: Optional[{{ attr.type }}] = None
+{%- endif %}
+{%- endfor %}
+
+{%- if data.response_type != "None" %}
+    def call(self, client: Client, **kwargs: Any) -> {{ data.class_name }}Response:
+{%- else %}
+    def call(self, client: Client, **kwargs: Any) -> None:
+{%- endif %}
+{%- if data.has_path_args or data.has_query_args %}
+        request_args = self.to_dict()
+{%- endif %}
+{%- if data.has_path_args %}
+        path_args = {
+{%- for attr in data.attributes %}
+{%- if attr.in_path %}
+            "{{ attr.prop }}": request_args["{{ attr.attr }}"],
+{%- endif %}
+{%- endfor %}
+        }
+{%- endif %}
+{%- if data.has_query_args %}
+        query_args = {
+{%- for attr in data.attributes %}
+{%- if not attr.in_path %}
+            "{{ attr.prop }}": request_args["{{ attr.attr }}"],
+{%- endif %}
+{%- endfor %}
+        }
+{%- endif %}
+        kwargs["method"] = "{{ data.method }}"
+{%- if data.has_path_args %}
+        kwargs["path"] = "{{ data.path }}".format(**path_args)
+{%- else %}
+        kwargs["path"] = "{{ data.path }}"
+{%- endif %}
+{%- if data.has_query_args %}
+        kwargs["json"] = query_args
+{%- endif %}
+{%- if data.response_type != "None" %}
+        response = client.request(**kwargs)
+        return {{ data.class_name }}Response.from_dict({"content": response.json()})
+{%- else %}
+        client.request(**kwargs)
+{%- endif %}
