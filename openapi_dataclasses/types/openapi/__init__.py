@@ -17,6 +17,8 @@ from .securityscheme import OpenApiSecurityScheme
 from .tag import OpenApiExternalDocumentation, OpenApiTag
 from .components import OpenApiComponents
 from .spec import OpenApiSpec
+from .operation import OpenApiOperation
+from .extdoc import OpenApiExternalDocumentation
 
 __all__ = [
     "OpenApiContact",
@@ -36,4 +38,6 @@ __all__ = [
     "OpenApiTag",
     "OpenApiComponents",
     "OpenApiSpec",
+    "OpenApiOperation",
+    "OpenApiExternalDocumentation",
 ]

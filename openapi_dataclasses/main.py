@@ -1,11 +1,10 @@
 import argparse
-import logging
 import os
 from typing import Optional
 
 from .parser.classgen import update_model_imports, update_model_attributes
 from .parser.reference import init_model_contexts
-from .types.configuration import Configuration
+from .configuration import Configuration
 from .types.openapi import OpenApiSpec
 from .writer import TemplateWriter
 

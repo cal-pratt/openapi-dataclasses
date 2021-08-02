@@ -6,7 +6,6 @@ from .example import OpenApiExample
 from .header import OpenApiHeader
 from .link import OpenApiLink
 from .parameter import OpenApiParameter
-from .path import OpenApiPath
 from .requestbody import OpenApiRequestBody
 from .response import OpenApiResponse
 from .schema import OpenApiSchema
@@ -38,13 +37,5 @@ class OpenApiComponents:
     security_schemes: dict[str, OpenApiSecurityScheme] = openapi_field("securitySchemes", default_factory=dict)
 
     links: dict[str, OpenApiLink] = openapi_field("links", default_factory=dict)
-
-    callbacks: dict[str, OpenApiPath] = openapi_field("callbacks", default_factory=dict)
-    """
-    A map of possible out-of band callbacks related to the parent operation. Each value in the map
-    is a Path Item Object that describes a set of requests that may be initiated by the API 
-    provider and the expected responses. The key value used to identify the path item object is an 
-    expression,evaluated at runtime, that identifies a URL to use for the callback operation.
-    """
 
     unhandled_data: CatchAll = openapi_field(default_factory=dict)
