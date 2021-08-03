@@ -11,7 +11,7 @@ This project is mainly being used to generate clients for the League of Legends 
 # Developement
 
 Setup your development environment:
- - Instal `nox`
+ - Install `nox`
  - Running the `dev`
  - Source the `dev` venv
 

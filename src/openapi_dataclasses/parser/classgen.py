@@ -90,7 +90,7 @@ def update_model_imports(
                 module_imports[import_module_name].add(import_class_name)
 
         current_context.module_imports = [
-            PythonImport(import_module, list(names))
+            PythonImport(import_module, sorted(list(names)))
             for import_module, names in module_imports.items()
         ]
 
