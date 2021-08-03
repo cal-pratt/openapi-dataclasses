@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Optional
+from typing import Optional
 
 from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
 

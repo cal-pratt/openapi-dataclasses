@@ -54,7 +54,8 @@
 #         else:
 #             raise ValueError(f"Found unsupported prop: {self.class_name=}")
 #
-#     def _resolve_property_type(self, property_data: dict[str, Any], is_list: bool) -> tuple[str, bool]:
+#     def _resolve_property_type(self, property_data: dict[str, Any],
+#     is_list: bool) -> tuple[str, bool]:
 #         if property_type := property_data.get("type"):
 #             if property_type in basic_types:
 #                 return basic_types[property_type], is_list

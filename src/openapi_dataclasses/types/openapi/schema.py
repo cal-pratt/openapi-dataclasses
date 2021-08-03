@@ -6,7 +6,7 @@ Not all features of OpenAPI have been modeled, if you have more use-cases, pleas
 """
 
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Optional, Union
+from typing import Any, Optional, Union
 
 from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
 
@@ -23,12 +23,12 @@ class OpenApiSchema(DataClassJsonMixin):
     enum: Optional[list[Any]] = None
     """5.20.
 
-    The value of this keyword MUST be an array.  This array SHOULD have at least one element. 
+    The value of this keyword MUST be an array.  This array SHOULD have at least one element.
     Elements in the array SHOULD be unique.
 
     Elements in the array MAY be of any type, including null.
 
-    An instance validates successfully against this keyword if its value is equal to one of the 
+    An instance validates successfully against this keyword if its value is equal to one of the
     elements in this keyword's array value.
     """
 
@@ -40,12 +40,12 @@ class OpenApiSchema(DataClassJsonMixin):
     )
     """5.21.
 
-    The value of this keyword MUST be either a string or an array.  If it is an array, elements of 
+    The value of this keyword MUST be either a string or an array.  If it is an array, elements of
     the array MUST be strings and MUST be unique.
-    
+
     String values MUST be one of the seven primitive types defined by the core specification.
-    
-    An instance matches successfully if its primitive type is one of the types defined by keyword. 
+
+    An instance matches successfully if its primitive type is one of the types defined by keyword.
     Recall: "number" includes "integer".
     """
 
@@ -68,19 +68,19 @@ class OpenApiSchema(DataClassJsonMixin):
 
     The value of "additionalItems" MUST be either a boolean or an object.
     If it is an object, this object MUST be a valid JSON Schema.
-    
+
     The value of "items" MUST be either a schema or array of schemas.
-    
+
     Successful validation of an array instance with regards to these two keywords is determined as
     follows:
 
-        if "items" is not present, or its value is an object, validation of the instance always 
+        if "items" is not present, or its value is an object, validation of the instance always
         succeeds, regardless of the value of "additionalItems";
-        
-        if the value of "additionalItems" is boolean value true or an object, validation of the 
+
+        if the value of "additionalItems" is boolean value true or an object, validation of the
         instance always succeeds;
-        
-        if the value of "additionalItems" is boolean value false and the value of "items" is an 
+
+        if the value of "additionalItems" is boolean value false and the value of "items" is an
         array, the instance is valid if its size is less than, or equal to, the size of "items".
 
     If either keyword is absent, it may be considered present with an empty schema.
@@ -89,21 +89,21 @@ class OpenApiSchema(DataClassJsonMixin):
     format: Optional[str] = None
     """7.1.
 
-    Structural validation alone may be insufficient to validate that an instance meets all the 
+    Structural validation alone may be insufficient to validate that an instance meets all the
     requirements of an application. The "format" keyword is defined to allow interoperable semantic
-    validation for a fixed subset of values which are accurately described by authoritative 
+    validation for a fixed subset of values which are accurately described by authoritative
     resources, be they RFCs or other external specifications.
-    
+
     The value of this keyword is called a format attribute.  It MUST be a string. A format attribute
-    can generally only validate a given set of instance types.  If the type of the instance to 
+    can generally only validate a given set of instance types.  If the type of the instance to
     validate is not in this set, validation for this format attribute and instance SHOULD succeed.
     """
 
     nullable: bool = False
     """https://swagger.io/specification/
 
-    A true value adds "null" to the allowed type specified by the type keyword, only if type is 
-    explicitly defined within the same Schema Object. Other Schema Object constraints retain their 
+    A true value adds "null" to the allowed type specified by the type keyword, only if type is
+    explicitly defined within the same Schema Object. Other Schema Object constraints retain their
     defined behavior, and therefore may disallow the use of null as a value. A false value leaves
     the specified or default type unmodified. The default value is false.
     """
@@ -111,8 +111,8 @@ class OpenApiSchema(DataClassJsonMixin):
     ref: Optional[str] = field(metadata=config(field_name="$ref"), default=None)
     """7.
 
-    Any time a subschema is expected, a schema may instead use an object containing a "$ref" 
-    property. The value of the $ref is a URI Reference. Resolved against the current URI base, it 
+    Any time a subschema is expected, a schema may instead use an object containing a "$ref"
+    property. The value of the $ref is a URI Reference. Resolved against the current URI base, it
     identifies the URI of a schema to use. All other properties in a "$ref" object MUST be ignored.
     """
 
@@ -130,7 +130,7 @@ class OpenApiSchema(DataClassJsonMixin):
     )
     """5.16.
 
-    The value of "properties" MUST be an object.  Each value of this object MUST be an object, and 
+    The value of "properties" MUST be an object.  Each value of this object MUST be an object, and
     each object MUST be a valid JSON Schema.
 
     If absent, it can be considered the same as an empty object.
@@ -146,15 +146,15 @@ class OpenApiSchema(DataClassJsonMixin):
     """5.18.
 
     The value of "additionalProperties" MUST be a boolean or a schema.
-    
-    If "additionalProperties" is absent, it may be considered present with an empty schema as a 
+
+    If "additionalProperties" is absent, it may be considered present with an empty schema as a
     value.
-    
+
     If "additionalProperties" is true, validation always succeeds.
-    
+
     If "additionalProperties" is false, validation succeeds only if the instance is an object and
     all properties on the instance were covered by "properties" and/or "patternProperties".
-    
+
     If "additionalProperties" is an object, validate the value as a schema to all of the properties
     that weren't validated by "properties" nor "patternProperties".
     """

@@ -24,7 +24,8 @@
 #             for schema, schema_data in self.openapi_json["components"]["schemas"].items()
 #         }
 #
-#         self.ref2class_lookup = {schema["ref"]: schema["class"] for schema in self.schemas.values()}
+#         self.ref2class_lookup = {schema["ref"]: schema["class"] for
+#         schema in self.schemas.values()}
 #
 #         self.operations = {
 #             self.formatter.schema2class(method_data["operationId"]): {

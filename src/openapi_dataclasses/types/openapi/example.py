@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Optional
+from typing import Any, Optional
 
 from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
 
@@ -24,15 +24,15 @@ class OpenApiExample(DataClassJsonMixin):
 
     value: Any = None
     """
-    Embedded literal example. The value field and externalValue field are mutually exclusive. 
-    To represent examples of media types that cannot naturally represented in JSON or YAML, use a 
+    Embedded literal example. The value field and externalValue field are mutually exclusive.
+    To represent examples of media types that cannot naturally represented in JSON or YAML, use a
     string value to contain the example, escaping where necessary.
     """
 
     external_value: Optional[str] = None
     """
-    A URL that points to the literal example. This provides the capability to reference examples 
-    that cannot easily be included in JSON or YAML documents. The value field and externalValue 
+    A URL that points to the literal example. This provides the capability to reference examples
+    that cannot easily be included in JSON or YAML documents. The value field and externalValue
     field are mutually exclusive.
     """
 

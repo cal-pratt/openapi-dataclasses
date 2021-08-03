@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Optional
+from typing import Optional
 
 from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
 
@@ -18,8 +18,8 @@ class OpenApiPath(DataClassJsonMixin):
 
     ref: Optional[str] = field(metadata=config(field_name="$ref"), default=None)
     """
-    Allows for an external definition of this path item. The referenced structure MUST be in the 
-    format of a Path Item Object. In case a Path Item Object field appears both in the defined 
+    Allows for an external definition of this path item. The referenced structure MUST be in the
+    format of a Path Item Object. In case a Path Item Object field appears both in the defined
     object and the referenced object, the behavior is undefined.
     """
 
@@ -30,7 +30,7 @@ class OpenApiPath(DataClassJsonMixin):
 
     description: Optional[str] = None
     """
-    An optional, string description, intended to apply to all operations in this path. 
+    An optional, string description, intended to apply to all operations in this path.
     CommonMark syntax MAY be used for rich text representation.
     """
 
@@ -81,10 +81,10 @@ class OpenApiPath(DataClassJsonMixin):
 
     parameters: dict[str, OpenApiParameter] = field(default_factory=dict)
     """
-    A list of parameters that are applicable for all the operations described under this path. 
-    These parameters can be overridden at the operation level, but cannot be removed there. 
-    The list MUST NOT include duplicated parameters. A unique parameter is defined by a combination 
-    of a name and location. The list can use the Reference Object to link to parameters that are 
+    A list of parameters that are applicable for all the operations described under this path.
+    These parameters can be overridden at the operation level, but cannot be removed there.
+    The list MUST NOT include duplicated parameters. A unique parameter is defined by a combination
+    of a name and location. The list can use the Reference Object to link to parameters that are
     defined at the OpenAPI Object's components/parameters.
     """
 

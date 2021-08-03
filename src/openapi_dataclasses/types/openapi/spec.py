@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import Any, ClassVar
 
 from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
 
@@ -18,9 +17,9 @@ class OpenApiSpec(DataClassJsonMixin):
 
     openapi: str
     """
-    This string MUST be the semantic version number of the OpenAPI Specification version that the OpenAPI document uses. 
-    The openapi field SHOULD be used by tooling specifications and clients to interpret the OpenAPI document. This is 
-    not related to the API info.version string.
+    This string MUST be the semantic version number of the OpenAPI Specification version that the
+    OpenAPI document uses. The openapi field SHOULD be used by tooling specifications and clients to
+    interpret the OpenAPI document. This is not related to the API info.version string.
     """
 
     info: OpenApiInfo
@@ -35,8 +34,8 @@ class OpenApiSpec(DataClassJsonMixin):
 
     servers: list[OpenApiServer] = field(default_factory=list)
     """
-    An array of Server Objects, which provide connectivity information to a target server. If the 
-    servers property is not provided, or is an empty array, the default value would be a Server 
+    An array of Server Objects, which provide connectivity information to a target server. If the
+    servers property is not provided, or is an empty array, the default value would be a Server
     Object with a url value of /.
     """
 
@@ -47,16 +46,16 @@ class OpenApiSpec(DataClassJsonMixin):
 
     security: list[dict[str, list[str]]] = field(default_factory=list)
     """
-    A declaration of which security mechanisms can be used across the API. The list of values 
-    includes alternative security requirement objects that can be used. Only one of the security 
-    requirement objects need to be satisfied to authorize a request. Individual operations can 
-    override this definition. To make security optional, an empty security requirement ({}) can be 
+    A declaration of which security mechanisms can be used across the API. The list of values
+    includes alternative security requirement objects that can be used. Only one of the security
+    requirement objects need to be satisfied to authorize a request. Individual operations can
+    override this definition. To make security optional, an empty security requirement ({}) can be
     included in the array.
 
-    Each name MUST correspond to a security scheme which is declared in the Security Schemes under 
-    the Components Object. If the security scheme is of type "oauth2" or "openIdConnect", then the 
-    value is a list of scope names required for the execution, and the list MAY be empty if 
-    authorization does not require a specified scope. For other security scheme types, the array 
+    Each name MUST correspond to a security scheme which is declared in the Security Schemes under
+    the Components Object. If the security scheme is of type "oauth2" or "openIdConnect", then the
+    value is a list of scope names required for the execution, and the list MAY be empty if
+    authorization does not require a specified scope. For other security scheme types, the array
     MUST be empty.
     """
 

@@ -4,7 +4,8 @@
 # from .schemareference import SchemaReference
 # from .type_resolver import TypeResolver
 # from .formatter import Formatter
-# from .types import EnumSchema, EnumAttribute, ObjectSchema, ObjectAttribute, OperationSchema, OperationAttribute
+# from .types import EnumSchema, EnumAttribute, ObjectSchema,
+# ObjectAttribute, OperationSchema, OperationAttribute
 # from .validation import validate_module
 # from .templatewriter import TemplateWriter
 #
@@ -155,8 +156,10 @@
 #                     schema_json=schema_reference.formatter.operation2json(operation),
 #                     method=method,
 #                     path=path,
-#                     has_path_args=any(attribute.in_path for attribute in attributes.values()),
-#                     has_query_args=any(not attribute.in_path for attribute in attributes.values()),
+#                     has_path_args=any(attribute.in_path for attribute in
+#                     attributes.values()),
+#                     has_query_args=any(not attribute.in_path for attribute in
+#                     attributes.values()),
 #                     attributes=list(attributes.values()),
 #                     response_type=response_type,
 #                     imports=dict(**type_resolver.required_imports),

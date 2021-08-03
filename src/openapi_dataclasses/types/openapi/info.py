@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Optional
+from typing import Optional
 
 from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
 
@@ -37,7 +37,7 @@ class OpenApiInfo(DataClassJsonMixin):
 
     version: str
     """
-    The version of the OpenAPI document 
+    The version of the OpenAPI document
     (which is distinct from the OpenAPI Specification version or the API implementation version).
     """
 
