@@ -1,6 +1,5 @@
 # openapi-dataclasses
-
-Build Status: [![CI](https://github.com/cal-pratt/openapi-dataclasses/actions/workflows/main.yml/badge.svg)](https://github.com/cal-pratt/openapi-dataclasses/actions/workflows/main.yml)
+[![CI](https://github.com/cal-pratt/openapi-dataclasses/actions/workflows/main.yml/badge.svg)](https://github.com/cal-pratt/openapi-dataclasses/actions/workflows/main.yml)
 
 ### This project is still under development in a POC phase.
 
