@@ -26,6 +26,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: excitedleigh/setup-nox@v2.0.0
 
+      - name: tests
+        run: nox -e tests
+
       - name: flake8
         run: nox -e flake8
 
