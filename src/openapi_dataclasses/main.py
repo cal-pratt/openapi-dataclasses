@@ -49,4 +49,6 @@ def main() -> Optional[int]:
     for context in model_contexts.values():
         writer.write_models_file(context)
 
+    writer.clean_generated_code()
+
     return 0

@@ -1,18 +1,17 @@
-import dataclasses
+from dataclasses import dataclass, field
 
-import dataclasses_json
+from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
 
 {% for module_import in data.module_imports -%}
 from {{ module_import.from_name }} import {{ module_import.import_names | join(', ') }}
 {% endfor %}
-from ..openapi import openapi_field, openapi_unhandled
 
 
-@dataclasses_json.dataclass_json(undefined=dataclasses_json.Undefined.INCLUDE)
-@dataclasses.dataclass
-class {{ data.class_name }}:
+@dataclass
+class {{ data.class_name }}(DataClassJsonMixin):
 {%- for attribute in data.class_attributes %}
-    {{ attribute.attribute_name }}: {{ attribute.attribute_type }} = openapi_field("{{ attribute.openapi_name }}")
+    {{ attribute.attribute_name }}: {{ attribute.attribute_type }} = field(metadata=config(field_name="{{ attribute.openapi_name }}"))
 {%- endfor %}
 
-    unhandled_data: dataclasses_json.CatchAll = openapi_unhandled()
+    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
+    unhandled_data: CatchAll = field(default_factory=dict)

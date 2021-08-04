@@ -1,5 +1,7 @@
 import os
 import shutil
+import subprocess
+import sys
 from typing import Any
 
 from jinja2 import Template
@@ -98,3 +100,21 @@ class TemplateWriter:
             filename=os.path.join(self.api_module, "__init__.py"),
             data=data,
         )
+
+    def clean_generated_code(self) -> None:
+        print(f"Running isort on {self.project_dir}...")
+        isort_complete = subprocess.run(
+            [sys.executable, "-m", "isort", "."],
+            cwd=self.project_dir,
+        )
+        if isort_complete.returncode != 0:
+            print(isort_complete.stderr)
+            raise Exception(f"Running isort on {self.project_dir} failed.")
+
+        print(f"Running black on {self.project_dir}...")
+        black_complete = subprocess.run(
+            [sys.executable, "-m", "black", "."],
+            cwd=self.project_dir,
+        )
+        if black_complete.returncode != 0:
+            raise Exception(f"Running black on {self.project_dir} failed.")

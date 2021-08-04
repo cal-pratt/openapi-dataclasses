@@ -1,0 +1,8 @@
+openapi_json: openapi.json
+client_module: testclient
+
+file_comparisons:
+- expected: "models/enum_class.py"
+  actual: "testclient/models/enum_class.py"
+- expected: "models/ref_class.py"
+  actual: "testclient/models/ref_class.py"

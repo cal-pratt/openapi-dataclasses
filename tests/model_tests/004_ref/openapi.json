@@ -1,0 +1,21 @@
+{
+  "openapi": "3.0.0",
+  "info": {"title": "test", "version": "1.0.0"},
+  "components": {
+    "schemas": {
+      "RefClass": {
+        "properties": {
+          "reference": {
+            "$ref": "#/components/schemas/EnumClass"
+          }
+        },
+        "type": "object"
+      },
+      "EnumClass": {
+          "enum": ["foo"],
+          "type": "string"
+      }
+    }
+  },
+  "paths": {}
+}

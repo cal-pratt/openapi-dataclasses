@@ -1,0 +1,23 @@
+{
+  "openapi": "3.0.0",
+  "info": {"title": "test", "version": "1.0.0"},
+  "components": {
+    "schemas": {
+      "ClassSchema": {
+        "properties": {
+          "one": {
+            "type": "integer"
+          },
+          "two": {
+            "type": "number"
+          },
+          "three": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "paths": {}
+}

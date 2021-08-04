@@ -1,0 +1,27 @@
+{
+  "openapi": "3.0.0",
+  "info": {"title": "test", "version": "1.0.0"},
+  "components": {
+    "schemas": {
+      "Some-Complex_schema_Name": {
+        "properties": {
+          "One": {
+            "type": "integer"
+          },
+          "two_Two": {
+            "type": "number"
+          },
+          "THREE-three": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "EnumSCHEMAName": {
+          "enum": ["one", "TwoTwo", "THREE"],
+          "type": "string"
+      }
+    }
+  },
+  "paths": {}
+}

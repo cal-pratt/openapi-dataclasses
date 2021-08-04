@@ -1,4 +1,5 @@
-from collections import Iterator, defaultdict
+from collections import defaultdict
+from typing import Iterator
 
 from ..types.openapi import OpenApiSchema, OpenApiSpec
 from ..types.python import (
