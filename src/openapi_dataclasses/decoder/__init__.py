@@ -2,14 +2,13 @@ from .annotated import AnnotatedHandler
 from .any import AnyHandler
 from .clazz import ClassHandler
 from .dataclass import DataclassHandler
+from .decoder import Decoder
 from .dict import DictHandler
+from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
 from .iter import IterHandler, SequenceHandler
 from .none import NoneHandler
-from .union import UnionHandler
-from .handler import DecoderHandler, Clazz, ClazzArgs, Data, Obj
 from .root import RootHandler
-from .decoder import Decoder
-
+from .union import UnionHandler
 
 __all__ = [
     "AnnotatedHandler",

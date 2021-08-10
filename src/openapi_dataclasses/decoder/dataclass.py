@@ -1,11 +1,13 @@
 import dataclasses
 from typing import get_type_hints
 
-from .handler import DecoderHandler, Clazz, ClazzArgs, Data, Obj
+from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
 
 
 class DataclassHandler(DecoderHandler):
-    def decode(self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data) -> Obj:
+    def decode(
+        self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data
+    ) -> Obj:
         resolved_hints = get_type_hints(clazz)
         kwargs = {}
 
@@ -47,12 +49,16 @@ class DataclassHandler(DecoderHandler):
                 return hint_clazz.__class_getitem__(hint_args)
 
             for field_name in resolved_hints:
-                resolved_hints[field_name] = reconstruct_args(resolved_hints[field_name])
+                resolved_hints[field_name] = reconstruct_args(
+                    resolved_hints[field_name]
+                )
 
         for clazz_field in dataclasses.fields(clazz):
             field_name = clazz_field.name
             if field_name in data:
                 field_clazz, field_args = self.examine_class(resolved_hints[field_name])
-                kwargs[field_name] = root.decode(root, field_clazz, field_args, data[field_name])
+                kwargs[field_name] = root.decode(
+                    root, field_clazz, field_args, data[field_name]
+                )
 
         return clazz(**kwargs)

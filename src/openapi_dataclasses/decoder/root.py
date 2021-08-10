@@ -1,17 +1,16 @@
 import dataclasses
 from collections import Sequence
-from typing import Any, Annotated, Union, Optional
+from typing import Annotated, Any, Optional, Union
 
 from .annotated import AnnotatedHandler
 from .any import AnyHandler
 from .clazz import ClassHandler
 from .dataclass import DataclassHandler
 from .dict import DictHandler
+from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
 from .iter import IterHandler, SequenceHandler
 from .none import NoneHandler
 from .union import UnionHandler
-
-from .handler import DecoderHandler, Clazz, ClazzArgs, Data, Obj
 
 
 class RootHandler(DecoderHandler):
@@ -26,12 +25,12 @@ class RootHandler(DecoderHandler):
         self._default_class_handler = ClassHandler()
         self._default_dataclass_handler = DataclassHandler()
 
-        self._handlers: dict[Clazz, DecoderHandler] = {
+        self._handlers: dict[Any, DecoderHandler] = {
             # The None class is special. Need to cast it with type
             type(None): NoneHandler(),
             Any: AnyHandler(),
             Annotated: AnnotatedHandler(),
-            Union:  UnionHandler(),
+            Union: UnionHandler(),
             # Optional[T] types get resolved as Union[T, None]. Kept here for transparency.
             Optional: UnionHandler(),
             dict: DictHandler(),
@@ -46,7 +45,9 @@ class RootHandler(DecoderHandler):
     def register_handler(self, clazz: Clazz, handler: DecoderHandler) -> None:
         self._handlers[clazz] = handler
 
-    def decode(self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data) -> Obj:
+    def decode(
+        self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data
+    ) -> Obj:
         if clazz not in self._handlers:
             if dataclasses.is_dataclass(clazz):
                 # This is where the fun lives.

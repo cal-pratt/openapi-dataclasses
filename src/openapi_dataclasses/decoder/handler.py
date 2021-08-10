@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections import Sequence
-from typing import Any, Type, get_args, get_origin, Callable
+from typing import Any, Callable, Type, get_args, get_origin
 
 Clazz = Type[Any]
 ClazzArgs = Sequence[Type[Any]]
@@ -13,7 +13,9 @@ Handler = Callable[[Clazz, ClazzArgs, Data], Obj]
 
 class DecoderHandler(ABC):
     @abstractmethod
-    def decode(self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data) -> Obj:
+    def decode(
+        self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data
+    ) -> Obj:
         """
         The basic decoder method takes a class, its generic arguments, the current data representing
         that class, and converts the data into an instance of the class.

@@ -1,12 +1,14 @@
 from typing import Any, Iterable
 
-from .handler import DecoderHandler, Clazz, ClazzArgs, Data, Obj
+from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
 
 
 class DictHandler(DecoderHandler):
-    def decode(self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data) -> Obj:
+    def decode(
+        self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data
+    ) -> Obj:
         if len(clazz_args) == 0:
-            clazz_args = [Any, Any]
+            clazz_args = [Any, Any]  # type: ignore
         elif len(clazz_args) != 2:
             raise ValueError
 
@@ -21,6 +23,8 @@ class DictHandler(DecoderHandler):
             raise ValueError
 
         return {
-            root.decode(root, key_clazz, key_args, key): root.decode(root, val_clazz, val_args, val)
+            root.decode(root, key_clazz, key_args, key): root.decode(
+                root, val_clazz, val_args, val
+            )
             for key, val in stream
         }

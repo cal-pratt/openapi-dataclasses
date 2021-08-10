@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Annotated, Optional, Sequence, TypeVar, Generic
+from typing import Annotated, Any, Generic, Optional, Sequence, TypeVar
 
 import pytest
+
 from openapi_dataclasses.decoder import Decoder
 
 
@@ -151,15 +152,15 @@ class RecursiveClass:
             {"foo": [{"foo": []}]},
             RecursiveClass([RecursiveClass([])]),
         ),
-    ]
+    ],
 )
 def test_simple_types(test_class, raw_data, expected, decoder):
     actual = decoder.decode(test_class, raw_data)
     assert actual == expected
 
 
-T = TypeVar('T')
-U = TypeVar('U')
+T = TypeVar("T")
+U = TypeVar("U")
 
 
 @dataclass

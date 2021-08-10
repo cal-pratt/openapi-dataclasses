@@ -1,7 +1,6 @@
 from typing import Optional
 
-from .handler import DecoderHandler, Clazz, Data, Obj
-
+from .handler import Clazz, Data, DecoderHandler, Obj
 from .root import RootHandler
 
 
@@ -21,4 +20,6 @@ class Decoder:
 
     def decode(self, clazz: Clazz, data: Data) -> Obj:
         decode_clazz, decode_clazz_args = self.root_handler.examine_class(clazz)
-        return self.root_handler.decode(self.root_handler, decode_clazz, decode_clazz_args, data)
+        return self.root_handler.decode(
+            self.root_handler, decode_clazz, decode_clazz_args, data
+        )
