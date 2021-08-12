@@ -1,11 +1,9 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
-
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
 
 
 @dataclass
-class OpenApiExternalDocumentation(DataClassJsonMixin):
+class OpenApiExternalDocumentation:
     """
     Allows referencing an external resource for extended documentation.
     """
@@ -19,6 +17,3 @@ class OpenApiExternalDocumentation(DataClassJsonMixin):
     """
     A short description for the tag. CommonMark syntax MAY be used for rich text representation.
     """
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)

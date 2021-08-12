@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
+from openapi_dataclasses.meta import metadata
 
 
 @dataclass
-class OpenApiContact(DataClassJsonMixin):
+class OpenApiContact:
     """
     Contact information for the exposed API.
     """
@@ -25,11 +25,9 @@ class OpenApiContact(DataClassJsonMixin):
     The email address of the contact person/organization. MUST be in the format of an email address.
     """
 
-    unhandled_data: CatchAll = field(default_factory=dict)
-
 
 @dataclass
-class OpenApiInfo(DataClassJsonMixin):
+class OpenApiInfo:
     """
     The object provides metadata about the API. The metadata MAY be used by the clients if needed,
     and MAY be presented in editing or documentation generation tools for convenience.
@@ -52,7 +50,7 @@ class OpenApiInfo(DataClassJsonMixin):
     """
 
     terms_of_service: Optional[str] = field(
-        metadata=config(field_name="termsOfService"), default=None
+        metadata=metadata(name="termsOfService"), default=None
     )
     """
     A URL to the Terms of Service for the API. MUST be in the format of a URL.
@@ -62,6 +60,3 @@ class OpenApiInfo(DataClassJsonMixin):
     """
     The contact information for the exposed API.
     """
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)

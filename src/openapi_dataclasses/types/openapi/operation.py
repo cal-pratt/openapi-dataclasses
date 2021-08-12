@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
-
+from ...meta import metadata
 from .extdoc import OpenApiExternalDocumentation
 from .parameter import OpenApiParameter
 from .requestbody import OpenApiRequestBody
@@ -11,7 +10,7 @@ from .server import OpenApiServer
 
 
 @dataclass
-class OpenApiOperation(DataClassJsonMixin):
+class OpenApiOperation:
     """
     Describes a single API operation on a path.
     """
@@ -55,14 +54,14 @@ class OpenApiOperation(DataClassJsonMixin):
     """
 
     external_docs: Optional[OpenApiExternalDocumentation] = field(
-        metadata=config(field_name="externalDocs"), default=None
+        metadata=metadata(name="externalDocs"), default=None
     )
     """
     Additional external documentation for this tag.
     """
 
     operation_id: Optional[str] = field(
-        metadata=config(field_name="operationId"), default=None
+        metadata=metadata(name="operationId"), default=None
     )
     """
     Unique string used to identify the operation. The id MUST be unique among all operations
@@ -71,7 +70,7 @@ class OpenApiOperation(DataClassJsonMixin):
     programming naming conventions.
     """
 
-    parameters: dict[str, OpenApiParameter] = field(default_factory=dict)
+    parameters: list[OpenApiParameter] = field(default_factory=list)
     """
     A list of parameters that are applicable for this operation. If a parameter is already defined
     at the Path Item, the new definition will override it but can never remove it. The list MUST NOT
@@ -81,7 +80,7 @@ class OpenApiOperation(DataClassJsonMixin):
     """
 
     request_body: Optional[OpenApiRequestBody] = field(
-        metadata=config(field_name="requestBody"), default=None
+        metadata=metadata(name="requestBody"), default=None
     )
     """
     The request body applicable for this operation. The requestBody is only supported in HTTP
@@ -115,6 +114,3 @@ class OpenApiOperation(DataClassJsonMixin):
     An alternative server array to service this operation. If an alternative server object is
     specified at the Path Item Object or Root level, it will be overridden by this value.
     """
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)

@@ -1,6 +1,7 @@
 from typing import Any, Iterable
 
 from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
+from .util import examine_class
 
 
 class DictHandler(DecoderHandler):
@@ -12,8 +13,8 @@ class DictHandler(DecoderHandler):
         elif len(clazz_args) != 2:
             raise ValueError
 
-        key_clazz, key_args = self.examine_class(clazz_args[0])
-        val_clazz, val_args = self.examine_class(clazz_args[1])
+        key_clazz, key_args = examine_class(clazz_args[0])
+        val_clazz, val_args = examine_class(clazz_args[1])
 
         if isinstance(data, dict):
             stream = ((key, val) for key, val in data.items())

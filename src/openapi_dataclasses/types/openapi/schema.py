@@ -5,14 +5,16 @@ https://datatracker.ietf.org/doc/html/draft-wright-json-schema-validation-00
 Not all features of OpenAPI have been modeled, if you have more use-cases, please create a PR.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Any, Optional, Union
 
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
+from openapi_dataclasses.meta import metadata
 
 
 @dataclass
-class OpenApiSchema(DataClassJsonMixin):
+class OpenApiSchema:
     """
     JSON Schema (application/schema+json) has several purposes, one of which is JSON instance
     validation. This document specifies a vocabulary for JSON Schema to describe the meaning of
@@ -33,9 +35,7 @@ class OpenApiSchema(DataClassJsonMixin):
     """
 
     type: list[str] = field(
-        metadata=config(
-            decoder=lambda d: None if d is None else ([d] if isinstance(d, str) else d),
-        ),
+        metadata=metadata(decoder=lambda d: d if isinstance(d, list) else [d]),
         default_factory=list,
     )
     """5.21.
@@ -49,19 +49,9 @@ class OpenApiSchema(DataClassJsonMixin):
     Recall: "number" includes "integer".
     """
 
-    items: list["OpenApiSchema"] = field(
-        metadata=config(
-            decoder=lambda d: [OpenApiSchema.from_dict(d)]
-            if isinstance(d, dict)
-            else [OpenApiSchema.from_dict(v) for v in d],
-        ),
-        default_factory=list,
-    )
-    additional_items: Optional[Union["OpenApiSchema", bool]] = field(
-        metadata=config(
-            field_name="additionalItems",
-            decoder=lambda d: OpenApiSchema.from_dict(d) if isinstance(d, dict) else d,
-        ),
+    items: Optional[Union[OpenApiSchema, list[OpenApiSchema]]] = None
+    additional_items: Optional[Union[OpenApiSchema, bool]] = field(
+        metadata=metadata(name="additionalItems"),
         default=None,
     )
     """5.9.
@@ -108,7 +98,7 @@ class OpenApiSchema(DataClassJsonMixin):
     the specified or default type unmodified. The default value is false.
     """
 
-    ref: Optional[str] = field(metadata=config(field_name="$ref"), default=None)
+    ref: Optional[str] = field(metadata=metadata(name="$ref"), default=None)
     """7.
 
     Any time a subschema is expected, a schema may instead use an object containing a "$ref"
@@ -122,12 +112,7 @@ class OpenApiSchema(DataClassJsonMixin):
     CommonMark syntax MAY be used for rich text representation.
     """
 
-    properties: dict[str, "OpenApiSchema"] = field(
-        metadata=config(
-            decoder=lambda d: {k: OpenApiSchema.from_dict(d[k]) for k in (d or {})}
-        ),
-        default_factory=dict,
-    )
+    properties: dict[str, OpenApiSchema] = field(default_factory=dict)
     """5.16.
 
     The value of "properties" MUST be an object.  Each value of this object MUST be an object, and
@@ -136,11 +121,8 @@ class OpenApiSchema(DataClassJsonMixin):
     If absent, it can be considered the same as an empty object.
     """
 
-    additional_properties: Optional[Union["OpenApiSchema", bool]] = field(
-        metadata=config(
-            field_name="additionalProperties",
-            decoder=lambda d: OpenApiSchema.from_dict(d) if isinstance(d, dict) else d,
-        ),
+    additional_properties: Optional[Union[OpenApiSchema, bool]] = field(
+        metadata=metadata(name="additionalProperties"),
         default=None,
     )
     """5.18.
@@ -158,6 +140,3 @@ class OpenApiSchema(DataClassJsonMixin):
     If "additionalProperties" is an object, validate the value as a schema to all of the properties
     that weren't validated by "properties" nor "patternProperties".
     """
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)

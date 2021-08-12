@@ -1,6 +1,7 @@
 from typing import Any
 
 from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
+from .util import examine_class
 
 
 class IterHandler(DecoderHandler):
@@ -17,7 +18,7 @@ class IterHandler(DecoderHandler):
         elif len(clazz_args) != 1:
             raise ValueError
 
-        element_clazz, element_args = self.examine_class(clazz_args[0])
+        element_clazz, element_args = examine_class(clazz_args[0])
         return clazz(
             root.decode(root, element_clazz, element_args, element) for element in data
         )

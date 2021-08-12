@@ -32,8 +32,12 @@ def find_references(schema: OpenApiSchema) -> Iterator[str]:
         yield "List"
 
     # If items is non-empty is set we're in an array type
-    for item in schema.items:
-        yield from find_references(item)
+    if schema.items:
+        if isinstance(schema.items, list):
+            for item in schema.items:
+                yield from find_references(item)
+        else:
+            yield from find_references(schema.items)
 
     if isinstance(schema.additional_items, OpenApiSchema):
         yield from find_references(schema.additional_items)
@@ -130,10 +134,15 @@ def find_attribute_type(
         # TODO [KnownLimitation]: MULTIPLE_ITEM_TYPES
         # Need to handle Union type in this event.
         # find_references should check to see if a union is needed
+        if isinstance(schema.items, list):
+            item = schema.items[0]
+        else:
+            item = schema.items
+
         discovered_type = find_attribute_type(
             class_contexts=class_contexts,
             current_class_name=current_class_name,
-            schema=schema.items[0],
+            schema=item,
         )
         return f"List[{discovered_type}]"
 

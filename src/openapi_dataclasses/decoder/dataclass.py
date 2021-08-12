@@ -1,14 +1,12 @@
-import dataclasses
-from typing import get_type_hints
-
 from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
+from .util import examine_class, get_cached_fields, get_cached_type_hints
 
 
 class DataclassHandler(DecoderHandler):
     def decode(
         self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data
     ) -> Obj:
-        resolved_hints = get_type_hints(clazz)
+        resolved_hints = get_cached_type_hints(clazz)
         kwargs = {}
 
         # Handling generic dataclasses makes this story a lot harder, but not impossible.
@@ -29,7 +27,7 @@ class DataclassHandler(DecoderHandler):
             typevars = dict(zip(clazz.__parameters__, clazz_args))
 
             def reconstruct_args(hint):
-                hint_clazz, hint_args = self.examine_class(hint)
+                hint_clazz, hint_args = examine_class(hint)
 
                 # If the typevar is already popped out, no need to keep looking.
                 if hint_clazz in typevars:
@@ -53,12 +51,19 @@ class DataclassHandler(DecoderHandler):
                     resolved_hints[field_name]
                 )
 
-        for clazz_field in dataclasses.fields(clazz):
-            field_name = clazz_field.name
+        for clazz_field in get_cached_fields(clazz):
+            python_name = field_name = clazz_field.name
+            metadata = clazz_field.metadata.get("openapi_dataclasses", {})
+            if "name" in metadata:
+                field_name = metadata["name"]
+
             if field_name in data:
-                field_clazz, field_args = self.examine_class(resolved_hints[field_name])
-                kwargs[field_name] = root.decode(
-                    root, field_clazz, field_args, data[field_name]
-                )
+                if "decoder" in metadata:
+                    kwargs[python_name] = metadata["decoder"](data[field_name])
+                else:
+                    field_clazz, field_args = examine_class(resolved_hints[python_name])
+                    kwargs[python_name] = root.decode(
+                        root, field_clazz, field_args, data[field_name]
+                    )
 
         return clazz(**kwargs)

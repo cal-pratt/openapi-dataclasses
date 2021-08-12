@@ -1,7 +1,5 @@
 from dataclasses import dataclass, field
 
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
-
 from .components import OpenApiComponents
 from .info import OpenApiInfo
 from .path import OpenApiPath
@@ -10,7 +8,7 @@ from .tag import OpenApiTag
 
 
 @dataclass
-class OpenApiSpec(DataClassJsonMixin):
+class OpenApiSpec:
     """
     This is the root document object of the OpenAPI document.
     """
@@ -60,11 +58,3 @@ class OpenApiSpec(DataClassJsonMixin):
     """
 
     tags: list[OpenApiTag] = field(default_factory=list)
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)
-
-    @classmethod
-    def load(cls, filename: str) -> "OpenApiSpec":
-        with open(filename, "rb") as openapi_json:
-            return OpenApiSpec.from_json(openapi_json.read())

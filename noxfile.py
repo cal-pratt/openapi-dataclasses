@@ -23,7 +23,7 @@ def tests(session):
 
 @nox.session(python=PYTHON_VERSION)
 def clean(session):
-    session.install(".[isort,flake8]")
+    session.install(".[isort,black]")
     session.run("black", "--version")
     session.run("isort", "--vn")
     session.run(*BLACK_ARGS)

@@ -1,22 +1,21 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
-
+from ...meta import metadata
 from .operation import OpenApiOperation
 from .parameter import OpenApiParameter
 from .server import OpenApiServer
 
 
 @dataclass
-class OpenApiPath(DataClassJsonMixin):
+class OpenApiPath:
     """
     Describes the operations available on a single path. A Path Item MAY be empty, due to ACL
     constraints. The path itself is still exposed to the documentation viewer but they will not
     know which operations and parameters are available.
     """
 
-    ref: Optional[str] = field(metadata=config(field_name="$ref"), default=None)
+    ref: Optional[str] = field(metadata=metadata(name="$ref"), default=None)
     """
     Allows for an external definition of this path item. The referenced structure MUST be in the
     format of a Path Item Object. In case a Path Item Object field appears both in the defined
@@ -87,6 +86,3 @@ class OpenApiPath(DataClassJsonMixin):
     of a name and location. The list can use the Reference Object to link to parameters that are
     defined at the OpenAPI Object's components/parameters.
     """
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)

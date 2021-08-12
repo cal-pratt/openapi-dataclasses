@@ -1,11 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
-
 
 @dataclass
-class OpenApiServerVariable(DataClassJsonMixin):
+class OpenApiServerVariable:
     """
     An object representing a Server Variable for server URL template substitution.
     """
@@ -30,12 +28,9 @@ class OpenApiServerVariable(DataClassJsonMixin):
     representation.
     """
 
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)
-
 
 @dataclass
-class OpenApiServer(DataClassJsonMixin):
+class OpenApiServer:
     """
     An object representing a Server.
     """
@@ -58,6 +53,3 @@ class OpenApiServer(DataClassJsonMixin):
     A map between a variable name and its value. The value is used for substitution in the server's
     URL template.
     """
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)

@@ -1,8 +1,10 @@
 import argparse
+import json
 import os
 from typing import Optional
 
 from .configuration import Configuration
+from .decoder import Decoder
 from .parser.classgen import update_model_attributes, update_model_imports
 from .parser.reference import init_model_contexts
 from .types.openapi import OpenApiSpec
@@ -33,7 +35,10 @@ def main() -> Optional[int]:
     parser = create_parser()
     configuration = create_config(parser.parse_args())
 
-    openapi_spec = OpenApiSpec.load(configuration.openapi_json)
+    decoder = Decoder()
+    with open(configuration.openapi_json, "rb") as openapi_json:
+        openapi_dict = json.load(openapi_json)
+    openapi_spec: OpenApiSpec = decoder.decode(OpenApiSpec, openapi_dict)
 
     model_contexts = init_model_contexts(openapi_spec)
     update_model_imports(openapi_spec, model_contexts)

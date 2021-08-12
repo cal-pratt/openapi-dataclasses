@@ -1,6 +1,7 @@
 from typing import Any
 
 from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
+from .util import examine_class
 
 
 class AnnotatedHandler(DecoderHandler):
@@ -14,5 +15,5 @@ class AnnotatedHandler(DecoderHandler):
         if len(clazz_args) == 0:
             clazz_args = [Any]  # type: ignore
 
-        annotated_clazz, annotated_clazz_args = self.examine_class(clazz_args[0])
+        annotated_clazz, annotated_clazz_args = examine_class(clazz_args[0])
         return root.decode(root, annotated_clazz, annotated_clazz_args, data)

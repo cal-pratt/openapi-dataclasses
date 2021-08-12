@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
+from openapi_dataclasses.meta import metadata
 
 
 @dataclass
-class OpenApiParameter(DataClassJsonMixin):
+class OpenApiParameter:
     """
     Describes a single operation parameter.
     A unique parameter is defined by a combination of a name and location.
@@ -38,7 +38,7 @@ class OpenApiParameter(DataClassJsonMixin):
         For all other cases, the name corresponds to the parameter name used by the in property.
     """
 
-    param_in: str = field(metadata=config(field_name="in"))
+    param_in: str = field(metadata=metadata(name="in"))
     """
     The location of the parameter. Possible values are "query", "header", "path" or "cookie".
     """
@@ -63,7 +63,7 @@ class OpenApiParameter(DataClassJsonMixin):
     """
 
     allow_empty_value: bool = field(
-        metadata=config(field_name="allowEmptyValue"), default=False
+        metadata=metadata(name="allowEmptyValue"), default=False
     )
     """
     Sets the ability to pass empty-valued parameters. This is valid only for query parameters and
@@ -71,6 +71,3 @@ class OpenApiParameter(DataClassJsonMixin):
     if behavior is n/a (cannot be serialized), the value of allowEmptyValue SHALL be ignored. Use
     of this property is NOT RECOMMENDED, as it is likely to be removed in a later revision.
     """
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)

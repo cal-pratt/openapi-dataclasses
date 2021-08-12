@@ -1,13 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
-
+from ...meta import metadata
 from .server import OpenApiServer
 
 
 @dataclass
-class OpenApiLink(DataClassJsonMixin):
+class OpenApiLink:
     """
     The Link object represents a possible design-time link for a response. The presence of a link
     does not guarantee the caller's ability to successfully invoke it, rather it provides a known
@@ -22,7 +21,7 @@ class OpenApiLink(DataClassJsonMixin):
     """
 
     operation_ref: Optional[str] = field(
-        metadata=config(field_name="operationRef"), default=None
+        metadata=metadata(name="operationRef"), default=None
     )
     """
     A relative or absolute URI reference to an OAS operation. This field is mutually exclusive of
@@ -31,7 +30,7 @@ class OpenApiLink(DataClassJsonMixin):
     """
 
     operation_id: Optional[str] = field(
-        metadata=config(field_name="operationId"), default=None
+        metadata=metadata(name="operationId"), default=None
     )
     """
     The name of an existing, resolvable OAS operation, as defined with a unique operationId. This
@@ -47,7 +46,7 @@ class OpenApiLink(DataClassJsonMixin):
     same parameter name in different locations (e.g. path.id).
     """
 
-    request_body: Any = field(metadata=config(field_name="requestBody"), default=None)
+    request_body: Any = field(metadata=metadata(name="requestBody"), default=None)
     """
     A literal value or {expression} to use as a request body when calling the target operation.
     """
@@ -61,6 +60,3 @@ class OpenApiLink(DataClassJsonMixin):
     """
     A server object to be used by the target operation.
     """
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)

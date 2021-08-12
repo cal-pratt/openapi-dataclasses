@@ -1,11 +1,9 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Optional
-
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
 
 
 @dataclass
-class OpenApiExample(DataClassJsonMixin):
+class OpenApiExample:
     """
     The example value is expected to be compatible with the type schema of its associated value.
     Tooling implementations MAY choose to validate compatibility automatically, and reject the
@@ -35,6 +33,3 @@ class OpenApiExample(DataClassJsonMixin):
     that cannot easily be included in JSON or YAML documents. The value field and externalValue
     field are mutually exclusive.
     """
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)

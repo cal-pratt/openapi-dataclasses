@@ -1,13 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from dataclasses_json import CatchAll, DataClassJsonMixin, Undefined, config
-
+from ...meta import metadata
 from .extdoc import OpenApiExternalDocumentation
 
 
 @dataclass
-class OpenApiTag(DataClassJsonMixin):
+class OpenApiTag:
     """
     Adds metadata to a single tag that is used by the Operation Object. It is not mandatory to have
     a Tag Object per tag defined in the Operation Object instances.
@@ -24,11 +23,8 @@ class OpenApiTag(DataClassJsonMixin):
     """
 
     external_docs: Optional[OpenApiExternalDocumentation] = field(
-        metadata=config(field_name="externalDocs"), default=None
+        metadata=metadata(name="externalDocs"), default=None
     )
     """
     Additional external documentation for this tag.
     """
-
-    dataclass_json_config = config(undefined=Undefined.INCLUDE)["dataclasses_json"]  # type: ignore
-    unhandled_data: CatchAll = field(default_factory=dict)
