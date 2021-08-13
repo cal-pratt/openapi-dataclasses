@@ -46,12 +46,12 @@ class UnionHandler(DecoderHandler):
                 filtered_clazz_args.append(clazz_arg)
 
         # If there's only one choice after filtering, lets just return it.
-        if len(clazz_args) == 1:
-            return (yield clazz_args[0], data)
+        if len(filtered_clazz_args) == 1:
+            return (yield filtered_clazz_args[0], data)
 
         # Try all of the remaining types one at a time.
         # We can possibly do better by examining fields.
-        for clazz_arg in clazz_args:
+        for clazz_arg in filtered_clazz_args:
             try:
                 return (yield clazz_arg, data)
             except:  # noqa: E722
