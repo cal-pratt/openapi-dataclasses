@@ -1,13 +1,17 @@
-from typing import Any
+from collections.abc import Sequence
+from typing import Any, Type
 
-from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
-from .util import examine_class
+from .handler import DecoderHandler, HandlerResponse
+from .util import get_cached_class_args
 
 
 class IterHandler(DecoderHandler):
-    def decode(
-        self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data
-    ) -> Obj:
+    def decode(self, clazz: Type[Any], data: Any) -> HandlerResponse:
+        clazz_origin, clazz_args = get_cached_class_args(clazz)
+
+        if clazz_origin is Sequence:
+            clazz_origin = list
+
         """
         This is a helper method for all of the iterable types. We can create a generator
         and provide that to the constructor of the different list types.
@@ -18,14 +22,7 @@ class IterHandler(DecoderHandler):
         elif len(clazz_args) != 1:
             raise ValueError
 
-        element_clazz, element_args = examine_class(clazz_args[0])
-        return clazz(
-            root.decode(root, element_clazz, element_args, element) for element in data
-        )
-
-
-class SequenceHandler(IterHandler):
-    def decode(
-        self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data
-    ) -> Obj:
-        return super().decode(root, list, clazz_args, data)
+        response = []
+        for element in data:
+            response.append((yield clazz_args[0], element))
+        return clazz_origin(response)

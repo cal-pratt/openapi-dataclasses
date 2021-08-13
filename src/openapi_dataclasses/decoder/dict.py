@@ -1,20 +1,17 @@
-from typing import Any, Iterable
+from typing import Any, Iterable, Type
 
-from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
-from .util import examine_class
+from .handler import DecoderHandler, HandlerResponse
+from .util import get_cached_class_args
 
 
 class DictHandler(DecoderHandler):
-    def decode(
-        self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data
-    ) -> Obj:
+    def decode(self, clazz: Type[Any], data: Any) -> HandlerResponse:
+        _, clazz_args = get_cached_class_args(clazz)
+
         if len(clazz_args) == 0:
             clazz_args = [Any, Any]  # type: ignore
         elif len(clazz_args) != 2:
             raise ValueError
-
-        key_clazz, key_args = examine_class(clazz_args[0])
-        val_clazz, val_args = examine_class(clazz_args[1])
 
         if isinstance(data, dict):
             stream = ((key, val) for key, val in data.items())
@@ -23,9 +20,9 @@ class DictHandler(DecoderHandler):
         else:
             raise ValueError
 
-        return {
-            root.decode(root, key_clazz, key_args, key): root.decode(
-                root, val_clazz, val_args, val
-            )
-            for key, val in stream
-        }
+        response = {}
+        for key, val in stream:
+            key_data = (yield clazz_args[0], key)
+            val_data = (yield clazz_args[1], val)
+            response[key_data] = val_data
+        return response

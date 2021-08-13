@@ -1,12 +1,10 @@
-from .handler import Clazz, ClazzArgs, Data, DecoderHandler, Obj
+from typing import Any, Type
+
+from .handler import DecoderHandler, HandlerResponse
 
 
 class NoneHandler(DecoderHandler):
-    def decode(
-        self, root: DecoderHandler, clazz: Clazz, clazz_args: ClazzArgs, data: Data
-    ) -> Obj:
-        if len(clazz_args) != 0:
-            raise ValueError
+    def decode(self, clazz: Type[Any], data: Any) -> HandlerResponse:
         if data is not None:
             raise ValueError
-        return None
+        return None  # type: ignore

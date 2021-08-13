@@ -1,12 +1,11 @@
 import dataclasses
+from collections.abc import Sequence
 from functools import cache
-from typing import get_args, get_origin, get_type_hints
-
-from .handler import Clazz, ClazzArgs
+from typing import Any, Type, get_args, get_origin, get_type_hints
 
 
 @cache
-def get_cached_type_hints(clazz: Clazz) -> dict[str, Clazz]:
+def get_cached_type_hints(clazz: Type[Any]) -> dict[str, Type[Any]]:
     """
     This cached method reduces the time of decoding some specs by up to 90%
     """
@@ -14,24 +13,27 @@ def get_cached_type_hints(clazz: Clazz) -> dict[str, Clazz]:
 
 
 @cache
-def get_cached_fields(clazz: Clazz) -> tuple[dataclasses.Field, ...]:
+def get_cached_fields(clazz: Type[Any]) -> tuple[dataclasses.Field, ...]:
     return dataclasses.fields(clazz)  # type: ignore
 
 
 @cache
-def examine_class(field_type: Clazz) -> tuple[Clazz, ClazzArgs]:
+def get_cached_class_args(clazz: Type[Any]) -> tuple[Type[Any], Sequence[Type[Any]]]:
     """
     Helper function to inspect class types.
     For a given class, determine the class to instantiate, and any generic arguments.
+
+    e.g.
+    Dict[str, int] -> (dict, (str, int))
+    Foo -> (Foo, (,))
     """
 
     # If the type is generic, this will be the class to use to instantiate
-    field_type_origin = get_origin(field_type)
-
-    # Try to use the mapping type, otherwise fall back to the annotation
-    field_clazz = field_type_origin or field_type
+    # This will be None if the class is not generic.
+    clazz_origin = get_origin(clazz) or clazz
 
     # If the type is generic, this will be the generic parameters
-    field_type_args = get_args(field_type)
+    # This will be an empty tuple if the class is not generic.
+    clazz_args = get_args(clazz)
 
-    return field_clazz, field_type_args
+    return clazz_origin, clazz_args
