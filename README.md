@@ -20,4 +20,3 @@ $ pip install nox
 $ nox
 $ . .nox/dev/bin/activate
 ```
-
